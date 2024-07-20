@@ -1,19 +1,27 @@
-// Function to encrypt text using a simple substitution cipher (shift by 3)
+// Function to encrypt text using a substitution cipher (shift by user-defined amount)
 function encrypt() {
     const inputText = document.getElementById('input-text').value;
-    const shift = 3;
+    const shift = parseInt(document.getElementById('shift-value').value) || 0;
     const encryptedText = inputText.split('').map(char => {
-      if (char >= 'a' && char <= 'z') {
-        // Shift lowercase letters
-        return String.fromCharCode((char.charCodeAt(0) - 97 + shift) % 26 + 97);
-      } else if (char >= 'A' && char <= 'Z') {
-        // Shift uppercase letters
-        return String.fromCharCode((char.charCodeAt(0) - 65 + shift) % 26 + 65);
-      } else {
-        // Non-alphabetic characters remain unchanged
-        return char;
-      }
+      // Shift each character by the specified amount
+      const charCode = char.charCodeAt(0);
+      // Handle wrapping around for printable ASCII characters (32 to 126)
+      return String.fromCharCode(((charCode - 32 + shift) % 95 + 95) % 95 + 32);
     }).join('');
     document.getElementById('output-text').value = encryptedText;
+  }
+  
+  // Function to copy the encrypted text to the clipboard
+  function copyToClipboard() {
+    const outputText = document.getElementById('output-text');
+    outputText.select();
+    document.execCommand('copy');
+    alert('Encrypted text copied to clipboard!');
+  }
+  
+  // Function to clear input and output text areas
+  function clearText() {
+    document.getElementById('input-text').value = '';
+    document.getElementById('output-text').value = '';
   }
   

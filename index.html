@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Encrypter and Decrypter - Version 5</title>
+  <title>Text Encrypter and Decrypter - Version 6</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,6 +33,12 @@
     }
     input[type="number"] {
       width: 60px;
+      padding: 5px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    select {
       padding: 5px;
       margin: 10px;
       border-radius: 5px;
@@ -87,15 +93,22 @@
 </head>
 <body>
   <div class="container">
-    <h1>Text Encrypter and Decrypter - Version 5</h1>
+    <h1>Text Encrypter and Decrypter - Version 6</h1>
     <textarea id="input-text" placeholder="Enter text here..."></textarea><br>
     <input type="number" id="shift-value" value="5" min="1" max="25" />
+    <select id="encryption-method">
+      <option value="caesar">Caesar Cipher</option>
+      <option value="base64">Base64 Encoding</option>
+    </select>
     <button onclick="encrypt()">Encrypt</button>
     <button onclick="decrypt()">Decrypt</button>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
     <button onclick="clearText()">Clear</button>
     <button onclick="saveText()">Save to Local Storage</button>
-    <button onclick="loadText()">Load from Local Storage</button><br>
+    <button onclick="loadText()">Load from Local Storage</button>
+    <button onclick="clearHistory()">Clear History</button>
+    <button onclick="exportHistory()">Export History</button>
+    <button onclick="importHistory()">Import History</button><br>
     <textarea id="output-text" placeholder="Result will appear here..."></textarea>
     <div class="search-container">
       <input type="text" id="search-history" placeholder="Search history..." oninput="filterHistory()">

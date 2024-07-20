@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Encrypter and Decrypter - Version 3</title>
+  <title>Text Encrypter and Decrypter - Version 5</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,20 +15,40 @@
       background-color: #f4f4f4;
       margin: 0;
     }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
     textarea {
       width: 300px;
       height: 100px;
       margin: 10px;
       padding: 10px;
       resize: none;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     button {
       margin: 5px;
-      padding: 10px;
+      padding: 10px 20px;
       cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
     }
-    .container {
-      text-align: center;
+    button:hover {
+      background-color: #0056b3;
     }
     .history {
       width: 300px;
@@ -37,121 +57,54 @@
       margin-top: 10px;
       border: 1px solid #ccc;
       padding: 10px;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    .history h3 {
+      margin-top: 0;
+    }
+    .history ul {
+      list-style: none;
+      padding: 0;
+    }
+    .history li {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+    .history li:last-child {
+      border-bottom: none;
+    }
+    .search-container {
+      margin: 10px 0;
+    }
+    .search-container input {
+      padding: 5px;
+      width: calc(100% - 20px);
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Text Encrypter and Decrypter - Version 3</h1>
+    <h1>Text Encrypter and Decrypter - Version 5</h1>
     <textarea id="input-text" placeholder="Enter text here..."></textarea><br>
     <input type="number" id="shift-value" value="5" min="1" max="25" />
-    <button onclick="autoDetectAndProcess()">Auto Detect and Process</button>
+    <button onclick="encrypt()">Encrypt</button>
+    <button onclick="decrypt()">Decrypt</button>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
     <button onclick="clearText()">Clear</button>
     <button onclick="saveText()">Save to Local Storage</button>
-    <button onclick="loadText()">Load from Local Storage</button>
-    <button onclick="toggleText()">Toggle Encrypted/Decrypted</button><br>
+    <button onclick="loadText()">Load from Local Storage</button><br>
     <textarea id="output-text" placeholder="Result will appear here..."></textarea>
+    <div class="search-container">
+      <input type="text" id="search-history" placeholder="Search history..." oninput="filterHistory()">
+    </div>
     <div class="history" id="history">
       <h3>History</h3>
       <ul id="history-list"></ul>
     </div>
   </div>
-
-  <script>
-    // Function to encrypt text using a substitution cipher (shift by user-defined amount)
-    function encrypt() {
-      const inputText = document.getElementById('input-text').value;
-      const shift = parseInt(document.getElementById('shift-value').value) || 0;
-      const encryptedText = inputText.split('').map(char => {
-        const charCode = char.charCodeAt(0);
-        return String.fromCharCode(((charCode - 32 + shift) % 95 + 95) % 95 + 32);
-      }).join('');
-      document.getElementById('output-text').value = encryptedText;
-      localStorage.setItem('savedText', encryptedText);
-      addToHistory(inputText, encryptedText, 'encrypt');
-    }
-
-    // Function to decrypt text using the same substitution cipher (shift by user-defined amount)
-    function decrypt() {
-      const inputText = document.getElementById('input-text').value;
-      const shift = parseInt(document.getElementById('shift-value').value) || 0;
-      const decryptedText = inputText.split('').map(char => {
-        const charCode = char.charCodeAt(0);
-        return String.fromCharCode(((charCode - 32 - shift + 95) % 95 + 95) % 95 + 32);
-      }).join('');
-      document.getElementById('output-text').value = decryptedText;
-      localStorage.setItem('savedText', decryptedText);
-      addToHistory(inputText, decryptedText, 'decrypt');
-    }
-
-    // Function to automatically detect if the text is encrypted and process accordingly
-    function autoDetectAndProcess() {
-      const inputText = document.getElementById('input-text').value;
-      const shift = parseInt(document.getElementById('shift-value').value) || 0;
-      const isEncrypted = inputText.split('').some(char => {
-        const charCode = char.charCodeAt(0);
-        return (charCode < 32 || charCode > 126);
-      });
-      if (isEncrypted) {
-        decrypt();
-      } else {
-        encrypt();
-      }
-    }
-
-    // Function to copy the text to the clipboard
-    function copyToClipboard() {
-      const outputText = document.getElementById('output-text');
-      outputText.select();
-      document.execCommand('copy');
-      alert('Text copied to clipboard!');
-    }
-
-    // Function to clear input and output text areas
-    function clearText() {
-      document.getElementById('input-text').value = '';
-      document.getElementById('output-text').value = '';
-    }
-
-    // Function to save the current text to local storage
-    function saveText() {
-      const outputText = document.getElementById('output-text').value;
-      localStorage.setItem('savedText', outputText);
-      alert('Text saved to local storage!');
-    }
-
-    // Function to load the text from local storage
-    function loadText() {
-      const savedText = localStorage.getItem('savedText');
-      if (savedText) {
-        document.getElementById('input-text').value = savedText;
-        document.getElementById('output-text').value = savedText;
-      } else {
-        alert('No text found in local storage!');
-      }
-    }
-
-    // Function to toggle between encrypted and decrypted text
-    function toggleText() {
-      const inputText = document.getElementById('input-text').value;
-      const outputText = document.getElementById('output-text').value;
-      if (inputText === outputText) {
-        document.getElementById('output-text').value = '';
-        document.getElementById('input-text').value = outputText;
-      } else {
-        document.getElementById('input-text').value = '';
-        document.getElementById('output-text').value = inputText;
-      }
-    }
-
-    // Function to add the encryption/decryption to history
-    function addToHistory(input, output, type) {
-      const historyList = document.getElementById('history-list');
-      const listItem = document.createElement('li');
-      listItem.textContent = `Type: ${type}, Input: ${input}, Output: ${output}`;
-      historyList.appendChild(listItem);
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

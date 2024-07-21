@@ -4,6 +4,7 @@ function encrypt() {
   const shift = parseInt(document.getElementById('shift-value').value) || 0;
   const method = document.getElementById('encryption-method').value;
   const caseFormat = document.getElementById('case-format').value;
+  const password = document.getElementById('password').value;
   let encryptedText;
 
   switch (method) {
@@ -30,10 +31,16 @@ function encrypt() {
       return;
   }
 
+  // Apply case format
   if (caseFormat === 'uppercase') {
     encryptedText = encryptedText.toUpperCase();
   } else if (caseFormat === 'lowercase') {
     encryptedText = encryptedText.toLowerCase();
+  }
+
+  // Apply password-based transformation
+  if (password) {
+    encryptedText = applyPasswordTransformation(encryptedText, password);
   }
 
   document.getElementById('output-text').value = encryptedText;
@@ -47,6 +54,7 @@ function decrypt() {
   const inputText = document.getElementById('input-text').value;
   const shift = parseInt(document.getElementById('shift-value').value) || 0;
   const method = document.getElementById('encryption-method').value;
+  const password = document.getElementById('password').value;
   let decryptedText;
 
   switch (method) {
@@ -57,12 +65,7 @@ function decrypt() {
       }).join('');
       break;
     case 'base64':
-      try {
-        decryptedText = atob(inputText);
-      } catch (e) {
-        alert('Invalid Base64 encoded text!');
-        return;
-      }
+      decryptedText = atob(inputText);
       break;
     case 'rot13':
       decryptedText = inputText.split('').map(char => {
@@ -83,10 +86,26 @@ function decrypt() {
       return;
   }
 
+  // Apply password-based transformation
+  if (password) {
+    decryptedText = applyPasswordTransformation(decryptedText, password, false);
+  }
+
   document.getElementById('output-text').value = decryptedText;
   localStorage.setItem('savedText', decryptedText);
   addToHistory(inputText, decryptedText, 'decrypt');
   analyzeFrequency(decryptedText);
+}
+
+// Function to apply password-based transformation
+function applyPasswordTransformation(text, password, encrypt = true) {
+  const passwordChars = password.split('').map(char => char.charCodeAt(0));
+  const textChars = text.split('').map(char => char.charCodeAt(0));
+  const passwordLength = passwordChars.length;
+  return textChars.map((charCode, index) => {
+    const passwordCharCode = passwordChars[index % passwordLength];
+    return encrypt ? charCode ^ passwordCharCode : charCode ^ passwordCharCode;
+  }).map(charCode => String.fromCharCode(charCode)).join('');
 }
 
 // Base32 Encoding function
@@ -141,12 +160,12 @@ function base32Decode(input) {
 function addToHistory(input, output, type) {
   const historyList = document.getElementById('history-list');
   const listItem = document.createElement('li');
-  listItem.textContent = `${type.toUpperCase()}: ${input} -> ${output}`;
-  
+  listItem.textContent = `${type.toUpperCase()}: ${input} -> ${output} (Date: ${new Date().toLocaleString()})`;
+
   const deleteButton = document.createElement('button');
   deleteButton.textContent = 'Delete';
   deleteButton.onclick = () => listItem.remove();
-  
+
   listItem.appendChild(deleteButton);
   historyList.appendChild(listItem);
 }
@@ -170,7 +189,8 @@ function saveSettings() {
   const settings = {
     method: document.getElementById('encryption-method').value,
     shift: document.getElementById('shift-value').value,
-    format: document.getElementById('case-format').value
+    format: document.getElementById('case-format').value,
+    password: document.getElementById('password').value
   };
   localStorage.setItem('encryptionSettings', JSON.stringify(settings));
   alert('Settings saved!');
@@ -183,6 +203,7 @@ function loadSettings() {
     document.getElementById('encryption-method').value = settings.method;
     document.getElementById('shift-value').value = settings.shift;
     document.getElementById('case-format').value = settings.format;
+    document.getElementById('password').value = settings.password;
     alert('Settings loaded!');
   } else {
     alert('No settings found!');
@@ -235,29 +256,56 @@ function importHistory() {
   input.click();
 }
 
-// Function to filter history
-function filterHistory() {
-  const filterText = document.getElementById('search-history').value.toLowerCase();
-  const historyItems = document.querySelectorAll('#history-list li');
-  historyItems.forEach(item => {
-    if (item.textContent.toLowerCase().includes(filterText)) {
-      item.style.display = '';
-    } else {
-      item.style.display = 'none';
-    }
+// Function to generate QR code from text
+function generateQRCode() {
+  const text = document.getElementById('output-text').value;
+  const qrCodeContainer = document.getElementById('qr-code-result');
+  qrCodeContainer.innerHTML = ''; // Clear previous QR code
+  new QRCode(qrCodeContainer, {
+    text: text,
+    width: 128,
+    height: 128
   });
 }
 
-// Function to analyze character frequency
+// Function to save encrypted/decrypted text to file
+function saveToFile() {
+  const text = document.getElementById('output-text').value;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'text.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Function to toggle night mode
+function toggleNightMode() {
+  document.body.classList.toggle('night-mode');
+}
+
+// Function to analyze frequency of characters
 function analyzeFrequency(text) {
-  const frequencyResult = document.getElementById('frequency-result');
   const frequency = {};
-
-  text.split('').forEach(char => {
+  for (const char of text) {
     frequency[char] = (frequency[char] || 0) + 1;
-  });
+  }
 
-  frequencyResult.innerHTML = Object.entries(frequency)
-    .map(([char, count]) => `${char}: ${count}`)
+  const result = Object.entries(frequency)
+    .map(([char, count]) => `<strong>${char}</strong>: ${count}`)
     .join('<br>');
+
+  document.getElementById('frequency-result').innerHTML = result;
+}
+
+// Function to filter history based on search input
+function filterHistory() {
+  const searchTerm = document.getElementById('search-history').value.toLowerCase();
+  const historyItems = document.querySelectorAll('#history-list li');
+
+  historyItems.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+  });
 }

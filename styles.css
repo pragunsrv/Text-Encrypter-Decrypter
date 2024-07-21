@@ -1,22 +1,31 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     min-height: 100vh;
-    justify-content: center;
-    background-color: #f4f4f4;
+    background: linear-gradient(45deg, #4b79a1, #283e51);
     margin: 0;
+    color: #fff;
   }
   
   .container {
-    text-align: center;
-    background: #fff;
+    background: #1c1c1c;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 800px;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .input-group, .output-group {
+    margin: 10px 0;
   }
   
   textarea {
@@ -26,7 +35,10 @@ body {
     padding: 10px;
     resize: none;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: none;
+    font-size: 16px;
+    background: #333;
+    color: #fff;
   }
   
   input[type="number"],
@@ -34,7 +46,10 @@ body {
     padding: 5px;
     margin: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: none;
+    font-size: 16px;
+    background: #333;
+    color: #fff;
   }
   
   button {
@@ -45,10 +60,34 @@ body {
     border-radius: 5px;
     background-color: #007BFF;
     color: white;
+    font-size: 16px;
   }
   
   button:hover {
     background-color: #0056b3;
+  }
+  
+  .settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .setting-item {
+    flex: 1 1 30%;
+    margin: 10px;
+    text-align: left;
+  }
+  
+  .setting-item label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   
   .history {
@@ -59,7 +98,8 @@ body {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    background: #f9f9f9;
+    background: #333;
+    color: #fff;
   }
   
   .history h3 {
@@ -73,7 +113,7 @@ body {
   
   .history li {
     padding: 5px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #555;
     display: flex;
     justify-content: space-between;
   }
@@ -89,17 +129,10 @@ body {
   .search-container input {
     padding: 5px;
     width: calc(100% - 20px);
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 5px;
-  }
-  
-  .settings {
-    margin: 10px 0;
-  }
-  
-  .settings label {
-    display: block;
-    margin: 5px 0;
+    background: #333;
+    color: #fff;
   }
   
   .frequency-analysis {
@@ -110,7 +143,8 @@ body {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    background: #f9f9f9;
+    background: #333;
+    color: #fff;
   }
   
   .frequency-analysis h3 {

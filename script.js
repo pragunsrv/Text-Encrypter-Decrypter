@@ -71,7 +71,12 @@ function decrypt() {
       }).join('');
       break;
     case 'base32':
-      decryptedText = base32Decode(inputText);
+      try {
+        decryptedText = base32Decode(inputText);
+      } catch (e) {
+        alert('Invalid Base32 encoded text!');
+        return;
+      }
       break;
     default:
       alert('Invalid decryption method!');
@@ -88,15 +93,15 @@ function decrypt() {
 function base32Encode(input) {
   const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   let binary = '';
-  let padding = '';
 
-  for (let i = 0; i < input.length; i++) {
-    binary += input.charCodeAt(i).toString(2).padStart(8, '0');
+  for (const char of input) {
+    binary += char.charCodeAt(0).toString(2).padStart(8, '0');
   }
 
   let output = '';
-  for (let j = 0; j < binary.length; j += 5) {
-    const segment = binary.slice(j, j + 5);
+  let padding = '';
+  for (let i = 0; i < binary.length; i += 5) {
+    const segment = binary.slice(i, i + 5);
     output += base32Chars[parseInt(segment, 2)];
   }
 

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Encrypter and Decrypter - Advanced UI</title>
+  <title>Text Encrypter and Decrypter</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Text Encrypter and Decrypter - Advanced UI</h1>
+    <h1>Text Encrypter and Decrypter</h1>
     <div class="input-group">
       <textarea id="input-text" placeholder="Enter text here..."></textarea>
     </div>
@@ -34,6 +34,10 @@
           <option value="lowercase">Lowercase</option>
         </select>
       </div>
+      <div class="setting-item">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Optional">
+      </div>
     </div>
     <div class="button-group">
       <button onclick="encrypt()">Encrypt</button>
@@ -45,6 +49,8 @@
       <button onclick="clearHistory()">Clear History</button>
       <button onclick="exportHistory()">Export History</button>
       <button onclick="importHistory()">Import History</button>
+      <button onclick="generateQRCode()">Generate QR Code</button>
+      <button onclick="saveToFile()">Save to File</button>
     </div>
     <div class="output-group">
       <textarea id="output-text" placeholder="Result will appear here..."></textarea>
@@ -60,7 +66,16 @@
       <h3>History</h3>
       <ul id="history-list"></ul>
     </div>
+    <div class="qr-code" id="qr-code">
+      <h3>QR Code</h3>
+      <div id="qr-code-result"></div>
+    </div>
+    <div class="night-mode-toggle">
+      <label for="night-mode">Night Mode:</label>
+      <input type="checkbox" id="night-mode" onclick="toggleNightMode()">
+    </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

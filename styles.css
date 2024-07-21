@@ -7,6 +7,11 @@ body {
     background: linear-gradient(45deg, #4b79a1, #283e51);
     margin: 0;
     color: #fff;
+    transition: background 0.5s;
+  }
+  
+  body.night-mode {
+    background: linear-gradient(45deg, #1c1c1c, #000);
   }
   
   .container {
@@ -17,6 +22,11 @@ body {
     width: 90%;
     max-width: 800px;
     text-align: center;
+    transition: background 0.5s;
+  }
+  
+  .container.night-mode {
+    background: #333;
   }
   
   h1 {
@@ -42,6 +52,7 @@ body {
   }
   
   input[type="number"],
+  input[type="password"],
   select {
     padding: 5px;
     margin: 10px;
@@ -149,5 +160,17 @@ body {
   
   .frequency-analysis h3 {
     margin-top: 0;
+  }
+  
+  .qr-code {
+    margin: 10px 0;
+  }
+  
+  .night-mode-toggle {
+    margin: 10px 0;
+  }
+  
+  .night-mode-toggle label {
+    margin-right: 10px;
   }
   

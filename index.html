@@ -3,100 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Encrypter and Decrypter - Version 7</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-      background-color: #f4f4f4;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 800px;
-    }
-    textarea {
-      width: 100%;
-      height: 100px;
-      margin: 10px 0;
-      padding: 10px;
-      resize: none;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    input[type="number"],
-    select {
-      padding: 5px;
-      margin: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      background-color: #007BFF;
-      color: white;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .history {
-      width: 100%;
-      max-height: 200px;
-      overflow-y: auto;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      background: #f9f9f9;
-    }
-    .history h3 {
-      margin-top: 0;
-    }
-    .history ul {
-      list-style: none;
-      padding: 0;
-    }
-    .history li {
-      padding: 5px;
-      border-bottom: 1px solid #ddd;
-    }
-    .history li:last-child {
-      border-bottom: none;
-    }
-    .search-container {
-      margin: 10px 0;
-    }
-    .search-container input {
-      padding: 5px;
-      width: calc(100% - 20px);
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .settings {
-      margin: 10px 0;
-    }
-    .settings label {
-      display: block;
-      margin: 5px 0;
-    }
-  </style>
+  <title>Text Encrypter and Decrypter</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Text Encrypter and Decrypter - Version 7</h1>
+    <h1>Text Encrypter and Decrypter</h1>
     <textarea id="input-text" placeholder="Enter text here..."></textarea><br>
     <div class="settings">
       <label for="encryption-method">Encryption Method:</label>
@@ -119,12 +31,16 @@
     <button onclick="decrypt()">Decrypt</button>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
     <button onclick="clearText()">Clear</button>
-    <button onclick="saveText()">Save to Local Storage</button>
-    <button onclick="loadText()">Load from Local Storage</button>
+    <button onclick="saveSettings()">Save Settings</button>
+    <button onclick="loadSettings()">Load Settings</button>
     <button onclick="clearHistory()">Clear History</button>
     <button onclick="exportHistory()">Export History</button>
     <button onclick="importHistory()">Import History</button><br>
     <textarea id="output-text" placeholder="Result will appear here..."></textarea>
+    <div class="frequency-analysis">
+      <h3>Character Frequency Analysis</h3>
+      <div id="frequency-result"></div>
+    </div>
     <div class="search-container">
       <input type="text" id="search-history" placeholder="Search history..." oninput="filterHistory()">
     </div>
